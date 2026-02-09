@@ -26,20 +26,15 @@ lottie_city = load_lottieurl("https://lottie.host/8040d77d-741c-4b55-871d-720496
 lottie_connection = load_lottieurl("https://lottie.host/5b090740-459d-4786-8152-4740e5317768/0j5Q1k2w2N.json")
 lottie_scan = load_lottieurl("https://lottie.host/a80d5885-26bf-466d-974a-1017e80f2d9e/9Z9V3X5s4T.json")
 
-# --- CUSTOM CSS (HUD EDITION) ---
+# --- CUSTOM CSS (RGB EDITION) ---
 st.markdown("""
     <style>
-    /* 1. CUSTOM 'SNIPER SCOPE' MOUSE CURSOR */
-    /* We use an SVG Data URI to create a Neon Crosshair */
+    /* 1. ANIMATED RGB MOUSE CURSOR */
+    /* We use an SVG with <animate> tags inside the Data URI */
     * {
-        cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="10" fill="none" stroke="%2364FFDA" stroke-width="2"/><line x1="16" y1="0" x2="16" y2="32" stroke="%2364FFDA" stroke-width="1"/><line x1="0" y1="16" x2="32" y2="16" stroke="%2364FFDA" stroke-width="1"/><circle cx="16" cy="16" r="2" fill="%23FF6B6B"/></svg>') 16 16, crosshair !important;
+        cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="10" fill="none" stroke="red" stroke-width="2"><animate attributeName="stroke" values="%23ff0000;%2300ff00;%230000ff;%23ff00ff;%23ffff00;%23ff0000" dur="2s" repeatCount="indefinite"/></circle><line x1="16" y1="0" x2="16" y2="32" stroke="red" stroke-width="1"><animate attributeName="stroke" values="%23ff0000;%2300ff00;%230000ff;%23ff00ff;%23ffff00;%23ff0000" dur="2s" repeatCount="indefinite"/></line><line x1="0" y1="16" x2="32" y2="16" stroke="red" stroke-width="1"><animate attributeName="stroke" values="%23ff0000;%2300ff00;%230000ff;%23ff00ff;%23ffff00;%23ff0000" dur="2s" repeatCount="indefinite"/></line></svg>') 16 16, crosshair !important;
     }
     
-    /* Hover effect for buttons - Cursor turns red */
-    button:hover {
-        cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="12" fill="none" stroke="%23FF6B6B" stroke-width="3"/><line x1="16" y1="4" x2="16" y2="28" stroke="%23FF6B6B" stroke-width="2"/><line x1="4" y1="16" x2="28" y2="16" stroke="%23FF6B6B" stroke-width="2"/></svg>') 16 16, pointer !important;
-    }
-
     /* 2. BACKGROUND ANIMATION */
     @keyframes moveBackground {
         0% { background-position: 0% 50%; }
@@ -56,16 +51,13 @@ st.markdown("""
     }
     
     /* 3. MENU BUTTON VISIBILITY (FIXED) */
-    /* We make the header transparent so you see the city, but keep the button visible */
     header[data-testid="stHeader"] {
         background: transparent !important;
-        pointer-events: none; /* Let clicks pass through empty space */
+        pointer-events: none;
     }
-    /* Re-enable clicks for the menu button and options */
     header[data-testid="stHeader"] > div {
         pointer-events: auto;
     }
-    /* Color the menu hamburger button Neon Cyan so it pops */
     button[kind="header"] {
         color: #64FFDA !important;
         background: rgba(0,0,0,0.5) !important;
@@ -73,7 +65,7 @@ st.markdown("""
     }
 
     /* 4. GLASS CARDS */
-    .block-container { padding-top: 3rem; } /* Space for the header */
+    .block-container { padding-top: 3rem; }
     div[data-testid="stExpander"], div.stDataFrame, div.stForm {
         background: rgba(10, 25, 47, 0.85);
         backdrop-filter: blur(12px);
@@ -83,7 +75,7 @@ st.markdown("""
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     }
     
-    /* 5. TYPOGRAPHY */
+    /* 5. TYPOGRAPHY & NEON TEXT */
     h1, h2, h3 {
         color: #E6F1FF !important;
         font-family: 'Courier New', monospace;
@@ -105,6 +97,8 @@ st.markdown("""
     .stButton>button:hover {
         transform: scale(1.05);
         box-shadow: 0 0 20px rgba(255, 107, 107, 0.6);
+        /* Spin effect on hover via CSS not supported on cursor, but we change glow */
+        cursor: pointer !important;
     }
     
     /* 7. INPUTS */
