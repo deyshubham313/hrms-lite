@@ -3,7 +3,7 @@ import requests
 import pandas as pd
 import plotly.express as px
 from streamlit_lottie import st_lottie
-from datetime import date, datetime
+from datetime import date
 
 # --- CONFIGURATION ---
 st.set_page_config(page_title="HRMS Galactica", page_icon="🪐", layout="wide")
@@ -81,7 +81,7 @@ st.markdown("""
         border: 1px solid #444 !important;
     }
     
-    header {visibility: hidden;}
+    /* ⚠️ FIXED: We removed the line that hid the header, so you can see the menu arrow now! */
     </style>
     """, unsafe_allow_html=True)
 
@@ -106,7 +106,6 @@ if menu == "Mission Control":
             df = pd.DataFrame(emp_res.json())
             
             if not df.empty:
-                # BONUS: Summary Counts
                 c1, c2 = st.columns(2)
                 c1.markdown(f"<h1 style='text-align:center; font-size: 60px;'>{len(df)}</h1><p style='text-align:center'>ACTIVE CREW</p>", unsafe_allow_html=True)
                 
@@ -123,6 +122,7 @@ if menu == "Mission Control":
                 with col2:
                      if lottie_rocket:
                          st_lottie(lottie_rocket, height=200)
+
             else:
                 st.warning("NO CREW DETECTED.")
     except:
@@ -166,14 +166,12 @@ elif menu == "Crew Management":
                     df = pd.DataFrame(data)
                     
                     # BONUS: Calculate Total Present Days for each employee
-                    # This is a simple client-side calculation for the bonus
                     attendance_counts = []
                     for eid in df['emp_id_str']:
                         try:
                             att_res = requests.get(f"{API_URL}/attendance/{eid}")
                             if att_res.status_code == 200:
                                 att_data = att_res.json()
-                                # Count how many times status is 'Present'
                                 present_count = sum(1 for x in att_data if x['status'] == 'Present')
                                 attendance_counts.append(present_count)
                             else:
@@ -183,11 +181,7 @@ elif menu == "Crew Management":
                     
                     df['Total Present'] = attendance_counts
 
-                    st.dataframe(
-                        df[["emp_id_str", "name", "department", "Total Present"]], 
-                        use_container_width=True, 
-                        hide_index=True
-                    )
+                    st.dataframe(df[["emp_id_str", "name", "department", "Total Present"]], use_container_width=True, hide_index=True)
                     
                     with st.expander("🛑 DISCHARGE MEMBER"):
                         del_id = st.selectbox("Select ID", df['emp_id_str'])
@@ -225,7 +219,7 @@ elif menu == "Flight Logs":
             with col2:
                 st.markdown("### 📊 DATA STREAM")
                 
-                # BONUS: Filter by Date Logic
+                # BONUS: Filter Logic
                 filter_mode = st.checkbox("Filter by Date Range?")
                 
                 hist = requests.get(f"{API_URL}/attendance/{sel_id}")
@@ -234,7 +228,6 @@ elif menu == "Flight Logs":
                     
                     if filter_mode:
                         start_d = st.date_input("Start Date", date.today())
-                        # Convert column to datetime for comparison
                         df_h['date'] = pd.to_datetime(df_h['date']).dt.date
                         df_h = df_h[df_h['date'] >= start_d]
                     
@@ -245,7 +238,7 @@ elif menu == "Flight Logs":
                         fig.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", font_color="white")
                         st.plotly_chart(fig, use_container_width=True)
                     else:
-                        st.info("No records found in this date range.")
+                        st.info("No records found.")
                 else:
                     if lottie_galaxy:
                         st_lottie(lottie_galaxy, height=200)
