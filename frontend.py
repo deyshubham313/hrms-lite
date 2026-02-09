@@ -11,7 +11,7 @@ st.set_page_config(page_title="CityOps HRMS", page_icon="🌃", layout="wide")
 # ⚠️ REPLACE WITH YOUR ACTUAL RENDER URL
 API_URL = "https://hrms-lite-ac8r.onrender.com"
 
-# --- ASSETS (Safe Loader) ---
+# --- ASSETS ---
 def load_lottieurl(url: str):
     try:
         r = requests.get(url)
@@ -21,24 +21,26 @@ def load_lottieurl(url: str):
     except:
         return None
 
-# Futuristic City Animations
-lottie_city = load_lottieurl("https://lottie.host/8040d77d-741c-4b55-871d-720496839077/1r4i9z6l8o.json") # Smart City
-lottie_connection = load_lottieurl("https://lottie.host/5b090740-459d-4786-8152-4740e5317768/0j5Q1k2w2N.json") # Network lines
-lottie_scan = load_lottieurl("https://lottie.host/a80d5885-26bf-466d-974a-1017e80f2d9e/9Z9V3X5s4T.json") # Scanner
-lottie_success = load_lottieurl("https://assets9.lottiefiles.com/packages/lf20_jbrw3hcz.json")
+# Animations
+lottie_city = load_lottieurl("https://lottie.host/8040d77d-741c-4b55-871d-720496839077/1r4i9z6l8o.json")
+lottie_connection = load_lottieurl("https://lottie.host/5b090740-459d-4786-8152-4740e5317768/0j5Q1k2w2N.json")
+lottie_scan = load_lottieurl("https://lottie.host/a80d5885-26bf-466d-974a-1017e80f2d9e/9Z9V3X5s4T.json")
 
-# --- CUSTOM CSS (THE "CYBERPUNK CITY" LOOK) ---
+# --- CUSTOM CSS (HUD EDITION) ---
 st.markdown("""
     <style>
-    /* 1. CUSTOM MOUSE CURSOR (Crosshair Style) */
+    /* 1. CUSTOM 'SNIPER SCOPE' MOUSE CURSOR */
+    /* We use an SVG Data URI to create a Neon Crosshair */
     * {
-        cursor: crosshair !important;
+        cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="10" fill="none" stroke="%2364FFDA" stroke-width="2"/><line x1="16" y1="0" x2="16" y2="32" stroke="%2364FFDA" stroke-width="1"/><line x1="0" y1="16" x2="32" y2="16" stroke="%2364FFDA" stroke-width="1"/><circle cx="16" cy="16" r="2" fill="%23FF6B6B"/></svg>') 16 16, crosshair !important;
     }
+    
+    /* Hover effect for buttons - Cursor turns red */
     button:hover {
-        cursor: pointer !important;
+        cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="12" fill="none" stroke="%23FF6B6B" stroke-width="3"/><line x1="16" y1="4" x2="16" y2="28" stroke="%23FF6B6B" stroke-width="2"/><line x1="4" y1="16" x2="28" y2="16" stroke="%23FF6B6B" stroke-width="2"/></svg>') 16 16, pointer !important;
     }
 
-    /* 2. MOVING BACKGROUND ANIMATION */
+    /* 2. BACKGROUND ANIMATION */
     @keyframes moveBackground {
         0% { background-position: 0% 50%; }
         50% { background-position: 100% 50%; }
@@ -46,86 +48,77 @@ st.markdown("""
     }
 
     .stApp {
-        /* High-Res Night City Image */
         background-image: url("https://images.unsplash.com/photo-1519608487953-e999c86e7455?q=80&w=2070&auto=format&fit=crop");
-        background-size: 120% 120%; /* Zoomed in slightly to allow movement */
+        background-size: 120% 120%;
         background-position: center;
         background-attachment: fixed;
-        animation: moveBackground 30s ease infinite; /* The "Moving" Effect */
+        animation: moveBackground 40s ease infinite;
     }
     
-    /* 3. GLASS CARDS with NEON GLOW */
-    .block-container { padding-top: 2rem; }
+    /* 3. MENU BUTTON VISIBILITY (FIXED) */
+    /* We make the header transparent so you see the city, but keep the button visible */
+    header[data-testid="stHeader"] {
+        background: transparent !important;
+        pointer-events: none; /* Let clicks pass through empty space */
+    }
+    /* Re-enable clicks for the menu button and options */
+    header[data-testid="stHeader"] > div {
+        pointer-events: auto;
+    }
+    /* Color the menu hamburger button Neon Cyan so it pops */
+    button[kind="header"] {
+        color: #64FFDA !important;
+        background: rgba(0,0,0,0.5) !important;
+        border-radius: 50%;
+    }
+
+    /* 4. GLASS CARDS */
+    .block-container { padding-top: 3rem; } /* Space for the header */
     div[data-testid="stExpander"], div.stDataFrame, div.stForm {
-        background: rgba(10, 25, 47, 0.85); /* Deep Blue Transparent */
+        background: rgba(10, 25, 47, 0.85);
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
         border-radius: 12px;
-        border: 1px solid rgba(100, 255, 218, 0.3); /* Cyan Border */
+        border: 1px solid rgba(100, 255, 218, 0.3);
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     }
     
-    /* Hover Effect on Cards (Glow Intensity) */
-    div[data-testid="stExpander"]:hover, div.stForm:hover {
-        border-color: #FF6B6B; /* Switch to Neon Orange on hover */
-        box-shadow: 0 0 25px rgba(255, 107, 107, 0.4);
-        transition: all 0.3s ease;
-    }
-
-    /* 4. TYPOGRAPHY (Tech Font) */
+    /* 5. TYPOGRAPHY */
     h1, h2, h3 {
         color: #E6F1FF !important;
         font-family: 'Courier New', monospace;
         text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
-        font-weight: 900;
-        letter-spacing: 1px;
     }
     p, label, .stMarkdown, .stRadio label {
         color: #8892b0 !important;
         font-family: 'Verdana', sans-serif;
     }
     
-    /* 5. METRICS (Neon Numbers) */
-    div[data-testid="stMetricValue"] {
-        color: #64FFDA !important; /* Neon Cyan */
-        text-shadow: 0 0 15px rgba(100, 255, 218, 0.8);
-    }
-    div[data-testid="stMetricLabel"] {
-        color: #FF6B6B !important; /* Neon Orange */
-    }
-
-    /* 6. BUTTONS (Futuristic) */
+    /* 6. NEON BUTTONS */
     .stButton>button {
         background: linear-gradient(45deg, #FF6B6B, #FF8E53) !important;
         color: white !important;
         border: none !important;
-        border-radius: 4px !important;
-        padding: 0.6rem 1.5rem !important;
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
+        clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
         font-weight: bold !important;
-        clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%); /* Sci-Fi Shape */
     }
     .stButton>button:hover {
         transform: scale(1.05);
         box-shadow: 0 0 20px rgba(255, 107, 107, 0.6);
     }
     
-    /* 7. INPUTS (Dark Mode) */
+    /* 7. INPUTS */
     .stTextInput>div>div>input, .stSelectbox>div>div>div, .stDateInput>div>div>input {
         background-color: #112240 !important;
         color: #64FFDA !important;
         border: 1px solid #233554 !important;
     }
 
-    /* Sidebar Styling */
+    /* Sidebar */
     section[data-testid="stSidebar"] {
         background-color: rgba(2, 12, 27, 0.95);
         border-right: 1px solid #233554;
     }
-    
-    /* Header visibility adjustment */
-    header {visibility: hidden;}
     </style>
     """, unsafe_allow_html=True)
 
@@ -152,39 +145,27 @@ if menu == "Dashboard":
             df = pd.DataFrame(emp_res.json())
             
             if not df.empty:
-                # Top Level Metrics
                 c1, c2 = st.columns(2)
-                
                 with c1:
                     st.metric("ACTIVE UNITS", len(df), "ONLINE")
-                
                 with c2:
                     top_dept = df['department'].value_counts().idxmax()
                     st.metric("PRIMARY SECTOR", top_dept)
                 
                 st.markdown("---")
-                
-                # Visualizations
                 col1, col2 = st.columns([2,1])
                 
                 with col1:
                     st.subheader("SECTOR ALLOCATION")
-                    # Cyberpunk Palette
                     fig = px.pie(df, names='department', hole=0.7, 
                                  color_discrete_sequence=["#64FFDA", "#FF6B6B", "#BD34FE", "#2196F3"])
-                    fig.update_layout(
-                        paper_bgcolor="rgba(0,0,0,0)", 
-                        plot_bgcolor="rgba(0,0,0,0)",
-                        font_color="#E6F1FF",
-                        showlegend=True
-                    )
+                    fig.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", font_color="#E6F1FF")
                     st.plotly_chart(fig, use_container_width=True)
                 
                 with col2:
                     st.subheader("LIVE FEED")
                     if lottie_connection:
                         st_lottie(lottie_connection, height=200)
-
             else:
                 st.info("NO DATA STREAM.")
                 if lottie_scan:
@@ -197,7 +178,6 @@ elif menu == "Personnel":
     st.title("🕵️ PERSONNEL DATABASE")
     
     c1, c2 = st.columns([1, 2])
-    
     with c1:
         st.subheader("ENLIST UNIT")
         with st.form("add_form"):
@@ -228,7 +208,6 @@ elif menu == "Personnel":
                 data = res.json()
                 if data:
                     df = pd.DataFrame(data)
-                    
                     # BONUS: Total Present Calc
                     attendance_counts = []
                     for eid in df['emp_id_str']:
@@ -242,24 +221,19 @@ elif menu == "Personnel":
                                 attendance_counts.append(0)
                         except:
                             attendance_counts.append(0)
-                    
                     df['MISSIONS COMPLETE'] = attendance_counts
 
-                    st.dataframe(
-                        df[["emp_id_str", "name", "department", "MISSIONS COMPLETE"]], 
-                        use_container_width=True, 
-                        hide_index=True
-                    )
+                    st.dataframe(df[["emp_id_str", "name", "department", "MISSIONS COMPLETE"]], use_container_width=True, hide_index=True)
                     
-                    with st.expander("⚠️ DISAVOW UNIT (DELETE)"):
+                    with st.expander("⚠️ DISAVOW UNIT"):
                         del_id = st.selectbox("SELECT UNIT ID", df['emp_id_str'])
                         if st.button("CONFIRM TERMINATION"):
                             requests.delete(f"{API_URL}/employees/{del_id}")
                             st.rerun()
         except:
-            st.warning("DATABASE ENCRYPTED/UNAVAILABLE")
+            st.warning("DATABASE ENCRYPTED")
 
-# --- PAGE 3: ACTIVITY LOGS ---
+# --- PAGE 3: LOGS ---
 elif menu == "Activity Logs":
     st.title("🛰️ ACTIVITY LOGS")
     
@@ -274,7 +248,6 @@ elif menu == "Activity Logs":
                 st.subheader("UPDATE STATUS")
                 sel_name = st.selectbox("SELECT OPERATIVE", list(emp_map.keys()))
                 sel_id = emp_map[sel_name]
-                
                 d = st.date_input("MISSION DATE", date.today())
                 stat = st.radio("STATUS", ["ACTIVE", "MIA"], horizontal=True)
                 final_stat = "Present" if stat == "ACTIVE" else "Absent"
@@ -287,28 +260,20 @@ elif menu == "Activity Logs":
 
             with col2:
                 st.subheader("MISSION HISTORY")
-                
                 use_filter = st.checkbox("Apply Time Filter")
-                
                 hist = requests.get(f"{API_URL}/attendance/{sel_id}")
                 if hist.status_code == 200 and hist.json():
                     df_h = pd.DataFrame(hist.json())
-                    
                     if use_filter:
                         start_d = st.date_input("Start Date", date.today())
                         df_h['date'] = pd.to_datetime(df_h['date']).dt.date
                         df_h = df_h[df_h['date'] >= start_d]
                     
                     if not df_h.empty:
-                        # Neon Colors
-                        colors = {"Present": "#64FFDA", "Absent": "#FF6B6B"} 
+                        colors = {"Present": "#64FFDA", "Absent": "#FF6B6B"}
                         fig = px.bar(df_h, x='date', y='status', color='status', 
                                      color_discrete_map=colors, title="OPERATIONAL UPTIME")
-                        fig.update_layout(
-                            paper_bgcolor="rgba(0,0,0,0)", 
-                            plot_bgcolor="rgba(0,0,0,0)",
-                            font_color="#E6F1FF"
-                        )
+                        fig.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", font_color="#E6F1FF")
                         st.plotly_chart(fig, use_container_width=True)
                     else:
                         st.info("NO RECORDS FOUND.")
