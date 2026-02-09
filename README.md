@@ -8,34 +8,33 @@
 
 ---
 
-**Ethara.AI HRMS** is a futuristic, high-performance Human Resource Management System designed to replace traditional spreadsheets with a "Cyber/High-Tech" interface.
+**Ethara.AI HRMS** is a futuristic, high-performance Human Resource Management System. It replaces boring spreadsheets with a "Cyber/High-Tech" interface featuring cinematic initialization, real-time data visualization, and secure personnel tracking.
 
-## ✅ What Has Been Done (Features)
+## 🌟 Key Features
 
-This project implements a Full-Stack HRMS with the following capabilities:
-
-* **Cinematic Initialization:** A "Warp Speed" system boot sequence with a hyperspace tunnel transition effect upon entry.
-* **Secure Admin Gateway:** A simulated "Handshake Protocol" login system with visual loading bars and biometric verification effects.
-* **Real-Time Dashboard:** A live command center displaying total active units, primary sectors, and sector allocation charts.
-* **Unit Management:** A complete system to enlist (add) new employees and manage the current roster with a "Disavow" (delete) function.
-* **Activity Logging:** A tracking system to log daily status (**Active/Inactive**) and visualize operational uptime via interactive bar charts.
-* **Cyber Aesthetics:** A fully custom UI with neon cursors, glassmorphism cards, and animated backgrounds.
+* **🎬 Cinematic Intro:** A "Warp Speed" system boot sequence with a hyperspace tunnel transition.
+* **🔒 Secure Gateway:** Admin login simulation with "Handshake Protocol" authentication and loading bars.
+* **📊 Live Dashboard:** Real-time metrics on workforce distribution and operational status.
+* **👥 Unit Management:** Seamless onboarding of new employees ("Units") and roster management.
+* **📡 Activity Logging:** Track daily status (Active/Inactive) with visual uptime charts.
+* **🎨 Cyber Aesthetics:** Custom neon cursors, glassmorphism cards, and animated backgrounds.
 
 ---
 
-## 🛠️ Tech Stack Used
+## 🛠️ Tech Stack
 
 * **Frontend:** [Streamlit](https://streamlit.io/) (Python)
 * **Backend:** [FastAPI](https://fastapi.tiangolo.com/) (Python)
 * **Data Processing:** Pandas
 * **Visualization:** Plotly Express
-* **Animations:** Lottie Files & Custom CSS
+* **Animations:** Lottie Files & CSS Animations
+* **Styling:** Advanced Custom CSS
 
 ---
 
-## ⚙️ How to Proceed (Step-by-Step Guide)
+## ⚙️ Steps to Run Locally (Copy-Paste Guide)
 
-Follow these steps exactly to run the project locally on your machine.
+Follow these steps exactly to run the project on your computer.
 
 ### 1. Clone the Repository
 Open your terminal and run:
