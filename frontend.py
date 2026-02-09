@@ -26,13 +26,13 @@ lottie_city = load_lottieurl("https://lottie.host/8040d77d-741c-4b55-871d-720496
 lottie_connection = load_lottieurl("https://lottie.host/5b090740-459d-4786-8152-4740e5317768/0j5Q1k2w2N.json")
 lottie_scan = load_lottieurl("https://lottie.host/a80d5885-26bf-466d-974a-1017e80f2d9e/9Z9V3X5s4T.json")
 
-# --- CUSTOM CSS (RGB EDITION) ---
+# --- CUSTOM CSS (HUD EDITION WITH CUSTOM CURSOR) ---
 st.markdown("""
     <style>
-    /* 1. ANIMATED RGB MOUSE CURSOR */
-    /* We use an SVG with <animate> tags inside the Data URI */
+    /* 1. CUSTOM FUTURISTIC MOUSE CURSOR */
+    /* This is an SVG of your cursor design embedded directly in the CSS */
     * {
-        cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="10" fill="none" stroke="red" stroke-width="2"><animate attributeName="stroke" values="%23ff0000;%2300ff00;%230000ff;%23ff00ff;%23ffff00;%23ff0000" dur="2s" repeatCount="indefinite"/></circle><line x1="16" y1="0" x2="16" y2="32" stroke="red" stroke-width="1"><animate attributeName="stroke" values="%23ff0000;%2300ff00;%230000ff;%23ff00ff;%23ffff00;%23ff0000" dur="2s" repeatCount="indefinite"/></line><line x1="0" y1="16" x2="32" y2="16" stroke="red" stroke-width="1"><animate attributeName="stroke" values="%23ff0000;%2300ff00;%230000ff;%23ff00ff;%23ffff00;%23ff0000" dur="2s" repeatCount="indefinite"/></line></svg>') 16 16, crosshair !important;
+        cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path d="M0,0 L16,0 L32,12 L32,32 L12,32 L0,20 Z" fill="%23222" stroke="%2364FFDA" stroke-width="1"/><circle cx="16" cy="16" r="6" fill="none" stroke="%2364FFDA" stroke-width="2"/></svg>') 0 0, auto !important;
     }
     
     /* 2. BACKGROUND ANIMATION */
@@ -75,7 +75,7 @@ st.markdown("""
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     }
     
-    /* 5. TYPOGRAPHY & NEON TEXT */
+    /* 5. TYPOGRAPHY */
     h1, h2, h3 {
         color: #E6F1FF !important;
         font-family: 'Courier New', monospace;
@@ -97,8 +97,6 @@ st.markdown("""
     .stButton>button:hover {
         transform: scale(1.05);
         box-shadow: 0 0 20px rgba(255, 107, 107, 0.6);
-        /* Spin effect on hover via CSS not supported on cursor, but we change glow */
-        cursor: pointer !important;
     }
     
     /* 7. INPUTS */
