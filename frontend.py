@@ -26,11 +26,10 @@ lottie_city = load_lottieurl("https://lottie.host/8040d77d-741c-4b55-871d-720496
 lottie_connection = load_lottieurl("https://lottie.host/5b090740-459d-4786-8152-4740e5317768/0j5Q1k2w2N.json")
 lottie_scan = load_lottieurl("https://lottie.host/a80d5885-26bf-466d-974a-1017e80f2d9e/9Z9V3X5s4T.json")
 
-# --- CUSTOM CSS (HUD EDITION WITH CUSTOM CURSOR) ---
+# --- CUSTOM CSS (HUD EDITION WITH CYBER BUTTONS) ---
 st.markdown("""
     <style>
     /* 1. CUSTOM FUTURISTIC MOUSE CURSOR */
-    /* This is an SVG of your cursor design embedded directly in the CSS */
     * {
         cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path d="M0,0 L16,0 L32,12 L32,32 L12,32 L0,20 Z" fill="%23222" stroke="%2364FFDA" stroke-width="1"/><circle cx="16" cy="16" r="6" fill="none" stroke="%2364FFDA" stroke-width="2"/></svg>') 0 0, auto !important;
     }
@@ -50,7 +49,7 @@ st.markdown("""
         animation: moveBackground 40s ease infinite;
     }
     
-    /* 3. MENU BUTTON VISIBILITY (FIXED) */
+    /* 3. MENU BUTTON VISIBILITY */
     header[data-testid="stHeader"] {
         background: transparent !important;
         pointer-events: none;
@@ -86,17 +85,21 @@ st.markdown("""
         font-family: 'Verdana', sans-serif;
     }
     
-    /* 6. NEON BUTTONS */
+    /* 6. NEON CYBER BUTTONS (UPDATED FOR VISIBILITY) */
     .stButton>button {
-        background: linear-gradient(45deg, #FF6B6B, #FF8E53) !important;
-        color: white !important;
+        /* Changed to bright cyan/blue gradient for high visibility */
+        background: linear-gradient(45deg, #64FFDA, #2196F3) !important;
+        color: #0a192f !important; /* Dark text contrasts better on bright button */
         border: none !important;
         clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
-        font-weight: bold !important;
+        font-weight: 900 !important;
+        letter-spacing: 1px;
+        box-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
     }
     .stButton>button:hover {
         transform: scale(1.05);
-        box-shadow: 0 0 20px rgba(255, 107, 107, 0.6);
+        box-shadow: 0 0 25px rgba(100, 255, 218, 0.8);
+        color: white !important;
     }
     
     /* 7. INPUTS */
@@ -167,7 +170,8 @@ if menu == "Dashboard":
 
 # --- PAGE 2: PERSONNEL ---
 elif menu == "Personnel":
-    st.title("🕵️ PERSONNEL DATABASE")
+    # REMOVED THE DETECTIVE ICON HERE
+    st.title("PERSONNEL DATABASE")
     
     c1, c2 = st.columns([1, 2])
     with c1:
@@ -192,6 +196,7 @@ elif menu == "Personnel":
 
     with c2:
         st.subheader("UNIT MANIFEST")
+        # THIS BUTTON WILL NOW BE BRIGHT CYAN AND VISIBLE
         if st.button("🔄 SYNC DATA"): st.rerun()
         
         try:
