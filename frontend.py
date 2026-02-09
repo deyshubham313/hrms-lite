@@ -5,7 +5,7 @@ import pandas as pd
 from datetime import date
 
 # Connect to our local backend
-API_URL = "http://127.0.0.1:8000"
+API_URL = "https://hrms-lite-ac8r.onrender.com"
 
 st.set_page_config(page_title="HRMS Lite", layout="wide")
 
