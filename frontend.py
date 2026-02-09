@@ -6,7 +6,7 @@ from streamlit_lottie import st_lottie
 from datetime import date
 
 # --- CONFIGURATION ---
-st.set_page_config(page_title="HRMS Galactica", page_icon="🪐", layout="wide")
+st.set_page_config(page_title="Nexus AI - HRMS", page_icon="🧠", layout="wide")
 
 # ⚠️ REPLACE WITH YOUR ACTUAL RENDER URL
 API_URL = "https://hrms-lite-ac8r.onrender.com"
@@ -21,84 +21,106 @@ def load_lottieurl(url: str):
     except:
         return None
 
-# Stable Space Animations
-lottie_astronaut = load_lottieurl("https://lottie.host/01303867-5120-41e1-8727-464a4b492372/2F8s6Zg8C6.json")
-lottie_rocket = load_lottieurl("https://lottie.host/49348b6c-3101-443f-9130-9b54c86b2458/V55v7l4HlJ.json")
-lottie_galaxy = load_lottieurl("https://lottie.host/5690558b-0714-419b-ab83-6d0e806c95c8/pY2tC8QW7r.json")
+# AI & Office Animations
+lottie_ai_brain = load_lottieurl("https://lottie.host/62650058-299e-4e2e-a50d-88849b2f4f13/zS6A6k8v2h.json") # AI Brain/Tech
+lottie_office = load_lottieurl("https://assets5.lottiefiles.com/packages/lf20_5tl1xxnz.json") # People working
+lottie_analytics = load_lottieurl("https://assets2.lottiefiles.com/packages/lf20_w51pcehl.json") # Data/Empty
+lottie_success = load_lottieurl("https://assets9.lottiefiles.com/packages/lf20_jbrw3hcz.json") # Checkmark
 
-# --- CUSTOM CSS (THE "PRO" LOOK) ---
+# --- CUSTOM CSS (THE "SILICON VALLEY" LOOK) ---
 st.markdown("""
     <style>
-    /* 1. THE SPACE BACKGROUND */
+    /* 1. BACKGROUND: Clean Tech White/Blue */
     .stApp {
-        background-image: url("https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop");
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
+        background-color: #F8FAFC;
+        background-image: linear-gradient(315deg, #F8FAFC 0%, #E2E8F0 74%);
     }
     
-    /* 2. GLASSMORPHISM CARDS */
+    /* 2. MODERN CARDS (Neumorphism/Clean) */
     .block-container { padding-top: 2rem; }
     div[data-testid="stExpander"], div.stDataFrame, div.stForm {
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border-radius: 15px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        padding: 20px;
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        background: #FFFFFF;
+        border-radius: 12px;
+        border: 1px solid #E2E8F0;
+        padding: 24px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     }
 
-    /* 3. NEON TEXT */
+    /* 3. TYPOGRAPHY (Professional Sans-Serif) */
     h1, h2, h3 {
-        color: white !important;
-        text-shadow: 0 0 10px #FF2E63, 0 0 20px #FF2E63;
-        font-family: 'Courier New', Courier, monospace;
+        color: #1E293B !important;
+        font-family: 'Inter', sans-serif;
+        font-weight: 700;
+        letter-spacing: -0.5px;
     }
     p, label, .stMarkdown, .stRadio label {
-        color: #E0E0E0 !important;
+        color: #475569 !important;
+        font-family: 'Inter', sans-serif;
     }
 
-    /* 4. BUTTONS */
+    /* 4. BUTTONS (Modern Indigo) */
     .stButton>button {
-        background: transparent !important;
-        color: #FF2E63 !important;
-        border: 2px solid #FF2E63 !important;
-        border-radius: 30px !important;
-        padding: 10px 25px !important;
-        font-weight: bold !important;
+        background-color: #4F46E5 !important; /* Indigo 600 */
+        color: white !important;
+        border: none !important;
+        border-radius: 8px !important;
+        padding: 0.6rem 1.2rem !important;
+        font-weight: 600 !important;
+        transition: all 0.2s;
     }
     .stButton>button:hover {
-        background: #FF2E63 !important;
-        color: white !important;
-        box-shadow: 0 0 15px #FF2E63, 0 0 30px #FF2E63;
+        background-color: #4338CA !important; /* Indigo 700 */
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
     }
     
-    /* 5. INPUTS */
+    /* 5. METRIC CARDS */
+    div[data-testid="stMetricValue"] {
+        color: #4F46E5 !important;
+        font-weight: 800;
+    }
+    
+    /* 6. INPUT FIELDS */
     .stTextInput>div>div>input, .stSelectbox>div>div>div, .stDateInput>div>div>input {
-        background-color: rgba(0, 0, 0, 0.5) !important;
-        color: white !important;
-        border: 1px solid #444 !important;
+        background-color: #F1F5F9 !important;
+        color: #1E293B !important;
+        border: 1px solid #CBD5E1 !important;
+        border-radius: 8px;
+    }
+    .stTextInput>div>div>input:focus {
+        border-color: #4F46E5 !important;
+        box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
     }
     
-    /* ⚠️ FIXED: We removed the line that hid the header, so you can see the menu arrow now! */
+    /* Sidebar Styling */
+    section[data-testid="stSidebar"] {
+        background-color: #FFFFFF;
+        border-right: 1px solid #E2E8F0;
+    }
+    
     </style>
     """, unsafe_allow_html=True)
 
 # --- SIDEBAR ---
 with st.sidebar:
-    if lottie_astronaut:
-        st_lottie(lottie_astronaut, height=180)
+    # Show AI Brain animation if loaded, else standard text
+    if lottie_ai_brain:
+        st_lottie(lottie_ai_brain, height=150)
+    else:
+        st.title("🧠")
     
-    st.markdown("## 🛸 COMMAND CENTER")
-    menu = st.radio("", ["Mission Control", "Crew Management", "Flight Logs"])
+    st.markdown("### NEXUS AI")
+    st.markdown("Human Resources System v2.0")
+    
+    menu = st.radio("Menu", ["Dashboard Overview", "Employee Directory", "Attendance Tracker"])
+    
     st.markdown("---")
-    st.info("System Status: 🟢 ONLINE")
+    st.caption("© 2026 Nexus AI Corp")
 
 # --- PAGE 1: DASHBOARD ---
-if menu == "Mission Control":
-    st.title("🚀 MISSION CONTROL")
-    st.markdown("### HRMS GALACTICA DASHBOARD")
+if menu == "Dashboard Overview":
+    st.title("📊 Enterprise Dashboard")
+    st.markdown("Welcome back, Admin. Here is today's personnel overview.")
     
     try:
         emp_res = requests.get(f"{API_URL}/employees/")
@@ -106,42 +128,59 @@ if menu == "Mission Control":
             df = pd.DataFrame(emp_res.json())
             
             if not df.empty:
-                c1, c2 = st.columns(2)
-                c1.markdown(f"<h1 style='text-align:center; font-size: 60px;'>{len(df)}</h1><p style='text-align:center'>ACTIVE CREW</p>", unsafe_allow_html=True)
+                # Top Level Metrics
+                c1, c2, c3 = st.columns(3)
                 
-                top_dept = df['department'].value_counts().idxmax()
-                c2.markdown(f"<h1 style='text-align:center; font-size: 40px;'>{top_dept}</h1><p style='text-align:center'>DOMINANT SECTOR</p>", unsafe_allow_html=True)
+                with c1:
+                    st.metric("Total Workforce", len(df), "+2 this week")
                 
+                with c2:
+                    top_dept = df['department'].value_counts().idxmax()
+                    st.metric("Largest Dept", top_dept)
+                    
+                with c3:
+                    st.metric("System Status", "Optimal", delta_color="normal")
+                
+                st.markdown("---")
+                
+                # Visualizations
                 col1, col2 = st.columns([2,1])
+                
                 with col1:
-                    fig = px.pie(df, names='department', title='SECTOR DISTRIBUTION', 
-                                 color_discrete_sequence=px.colors.sequential.Plasma, hole=0.5)
-                    fig.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", font_color="white")
+                    st.subheader("Departmental Distribution")
+                    # Professional Color Palette
+                    fig = px.pie(df, names='department', hole=0.6, 
+                                 color_discrete_sequence=px.colors.qualitative.G10)
+                    fig.update_layout(showlegend=True, margin=dict(t=0, b=0, l=0, r=0))
                     st.plotly_chart(fig, use_container_width=True)
                 
                 with col2:
-                     if lottie_rocket:
-                         st_lottie(lottie_rocket, height=200)
-
+                    st.subheader("Team Activity")
+                    if lottie_office:
+                        st_lottie(lottie_office, height=200)
+                    else:
+                        st.info("System operational.")
             else:
-                st.warning("NO CREW DETECTED.")
+                st.info("System initialized. No data available.")
+                if lottie_analytics:
+                    st_lottie(lottie_analytics, height=200)
     except:
-        st.error("COMMUNICATION LINK LOST")
+        st.error("⚠️ Server Connection Failed. Please check API URL.")
 
-# --- PAGE 2: CREW MANAGEMENT ---
-elif menu == "Crew Management":
-    st.title("👨‍🚀 CREW MANAGEMENT")
+# --- PAGE 2: EMPLOYEE DIRECTORY ---
+elif menu == "Employee Directory":
+    st.title("👥 Employee Directory")
     
     c1, c2 = st.columns([1, 2])
     
     with c1:
-        st.markdown("### ➕ RECRUIT NEW")
+        st.subheader("Onboard Talent")
         with st.form("add_form"):
-            e_id = st.text_input("CREW ID")
-            name = st.text_input("FULL NAME")
-            email = st.text_input("EMAIL")
-            dept = st.selectbox("SECTOR", ["Engineering", "Command", "Operations", "Science"])
-            submit = st.form_submit_button("INITIATE UPLOAD")
+            e_id = st.text_input("Employee ID (Unique)")
+            name = st.text_input("Full Name")
+            email = st.text_input("Corporate Email")
+            dept = st.selectbox("Department", ["AI Research", "Engineering", "Product", "Sales", "HR"])
+            submit = st.form_submit_button("Create Profile")
             
             if submit:
                 if e_id and name:
@@ -149,15 +188,20 @@ elif menu == "Crew Management":
                         "emp_id_str": e_id, "name": name, "email": email, "department": dept
                     })
                     if res.status_code == 200:
-                        st.success("CREW MEMBER REGISTERED")
+                        st.success("Profile Created Successfully")
+                        if lottie_success:
+                            st_lottie(lottie_success, height=60, key="succ_1")
                         st.rerun()
                     else:
-                        st.error("UPLOAD FAILED")
+                        st.error("Submission Failed. Check duplicate ID.")
 
     with c2:
-        st.markdown("### 📋 ACTIVE ROSTER & STATS")
-        if st.button("🔄 REFRESH"): st.rerun()
+        st.subheader("Current Roster")
         
+        c_search, c_refresh = st.columns([3,1])
+        with c_refresh:
+            if st.button("🔄 Refresh"): st.rerun()
+            
         try:
             res = requests.get(f"{API_URL}/employees/")
             if res.status_code == 200:
@@ -165,7 +209,8 @@ elif menu == "Crew Management":
                 if data:
                     df = pd.DataFrame(data)
                     
-                    # BONUS: Calculate Total Present Days for each employee
+                    # BONUS: Performance/Attendance Stats
+                    # Client-side calculation for "Total Present"
                     attendance_counts = []
                     for eid in df['emp_id_str']:
                         try:
@@ -179,21 +224,26 @@ elif menu == "Crew Management":
                         except:
                             attendance_counts.append(0)
                     
-                    df['Total Present'] = attendance_counts
+                    df['Days Present'] = attendance_counts
 
-                    st.dataframe(df[["emp_id_str", "name", "department", "Total Present"]], use_container_width=True, hide_index=True)
+                    # Display clean table
+                    st.dataframe(
+                        df[["emp_id_str", "name", "department", "Days Present"]], 
+                        use_container_width=True, 
+                        hide_index=True
+                    )
                     
-                    with st.expander("🛑 DISCHARGE MEMBER"):
-                        del_id = st.selectbox("Select ID", df['emp_id_str'])
-                        if st.button("CONFIRM DISCHARGE"):
+                    with st.expander("Administrative Actions (Delete)"):
+                        del_id = st.selectbox("Select Employee to Remove", df['emp_id_str'])
+                        if st.button("Terminate Profile", type="secondary"):
                             requests.delete(f"{API_URL}/employees/{del_id}")
                             st.rerun()
         except:
-            st.error("DATABASE OFFLINE")
+            st.warning("Unable to fetch directory data.")
 
-# --- PAGE 3: LOGS ---
-elif menu == "Flight Logs":
-    st.title("🛰️ FLIGHT LOGS")
+# --- PAGE 3: ATTENDANCE TRACKER ---
+elif menu == "Attendance Tracker":
+    st.title("📅 Attendance Tracker")
     
     try:
         res = requests.get(f"{API_URL}/employees/")
@@ -203,44 +253,48 @@ elif menu == "Flight Logs":
             
             col1, col2 = st.columns([1,2])
             with col1:
-                st.markdown("### 📡 LOG ENTRY")
-                sel_name = st.selectbox("SELECT OFFICER", list(emp_map.keys()))
+                st.subheader("Log Entry")
+                sel_name = st.selectbox("Select Employee", list(emp_map.keys()))
                 sel_id = emp_map[sel_name]
-                d = st.date_input("DATE", date.today())
-                stat = st.radio("STATUS", ["ON DUTY", "AWOL"], horizontal=True)
-                final_stat = "Present" if stat == "ON DUTY" else "Absent"
                 
-                if st.button("TRANSMIT"):
+                d = st.date_input("Date", date.today())
+                stat = st.radio("Status", ["Present", "Remote", "Absent"], horizontal=True)
+                
+                # Logic: Map "Remote" to "Present" for backend simplicity, or keep consistent
+                final_stat = "Absent" if stat == "Absent" else "Present"
+                
+                if st.button("Submit Log"):
                     requests.post(f"{API_URL}/attendance/", json={
                         "emp_id_str": sel_id, "date": str(d), "status": final_stat
                     })
-                    st.success("LOG UPDATED")
+                    st.success("Entry Logged")
+                    if lottie_success:
+                        st_lottie(lottie_success, height=50, key="succ_2")
 
             with col2:
-                st.markdown("### 📊 DATA STREAM")
+                st.subheader("Analytics")
                 
-                # BONUS: Filter Logic
-                filter_mode = st.checkbox("Filter by Date Range?")
+                # BONUS: Filter
+                use_filter = st.checkbox("Filter by Date")
                 
                 hist = requests.get(f"{API_URL}/attendance/{sel_id}")
                 if hist.status_code == 200 and hist.json():
                     df_h = pd.DataFrame(hist.json())
                     
-                    if filter_mode:
-                        start_d = st.date_input("Start Date", date.today())
+                    if use_filter:
+                        start_d = st.date_input("From Date", date.today())
                         df_h['date'] = pd.to_datetime(df_h['date']).dt.date
                         df_h = df_h[df_h['date'] >= start_d]
                     
                     if not df_h.empty:
-                        colors = {"Present": "#00E5FF", "Absent": "#FF2E63"}
+                        # Corporate Colors: Indigo for Present, Gray for Absent
+                        colors = {"Present": "#4F46E5", "Absent": "#94A3B8"} 
                         fig = px.bar(df_h, x='date', y='status', color='status', 
-                                     color_discrete_map=colors, title="DUTY CYCLES")
-                        fig.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", font_color="white")
+                                     color_discrete_map=colors, title="Attendance History")
                         st.plotly_chart(fig, use_container_width=True)
                     else:
-                        st.info("No records found.")
+                        st.info("No records found in this period.")
                 else:
-                    if lottie_galaxy:
-                        st_lottie(lottie_galaxy, height=200)
+                    st.info("No attendance history available.")
     except:
-        st.error("DATA UPLINK FAILED")
+        st.error("Database connection required.")
