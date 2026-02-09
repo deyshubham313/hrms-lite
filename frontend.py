@@ -27,7 +27,11 @@ def load_lottieurl(url: str):
         return None
 
 # Animations
+# 1. Main City (Intro)
 lottie_city = load_lottieurl("https://lottie.host/8040d77d-741c-4b55-871d-720496839077/1r4i9z6l8o.json")
+# 2. The Transition Tunnel (Warp Speed)
+lottie_tunnel = load_lottieurl("https://lottie.host/93291887-4340-4c4f-9694-814d95b597c4/1X152e041F.json") 
+# 3. Sidebar/Dashboard Icons
 lottie_connection = load_lottieurl("https://lottie.host/5b090740-459d-4786-8152-4740e5317768/0j5Q1k2w2N.json")
 lottie_scan = load_lottieurl("https://lottie.host/a80d5885-26bf-466d-974a-1017e80f2d9e/9Z9V3X5s4T.json")
 
@@ -156,6 +160,15 @@ st.markdown("""
         letter-spacing: 8px;
         margin-bottom: 30px;
     }
+    
+    /* ANIMATION FOR EXITING INTRO */
+    @keyframes zoomOut {
+        0% { opacity: 1; transform: scale(1); }
+        100% { opacity: 0; transform: scale(1.5); }
+    }
+    .zoom-out-anim {
+        animation: zoomOut 1s forwards;
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -167,10 +180,10 @@ if st.session_state['app_mode'] == 'intro':
     # --- INTRO LANDING PAGE ---
     st.markdown("<br><br>", unsafe_allow_html=True)
     
-    # We use a placeholder to swap content for the animation
-    main_holder = st.empty()
+    # Placeholder for the content so we can "wipe" it later
+    intro_holder = st.empty()
     
-    with main_holder.container():
+    with intro_holder.container():
         c1, c2, c3 = st.columns([1, 2, 1])
         with c2:
             st.markdown('<div class="intro-title">Ethara.AI</div>', unsafe_allow_html=True)
@@ -187,19 +200,20 @@ if st.session_state['app_mode'] == 'intro':
     
     # --- THE "WARP SPEED" TRANSITION ---
     if init_btn:
-        # 1. Clear the screen
-        main_holder.empty()
+        # 1. Clear the intro content immediately
+        intro_holder.empty()
         
-        # 2. Show the "Flying through data" animation
+        # 2. Show the "Flying through Tunnel" animation
         with st.empty():
-            # We use the connection animation but scaled up and sped up
-            if lottie_connection:
-                st_lottie(lottie_connection, height=600, speed=2.5, key="warp_tunnel")
+            # If the tunnel animation loads, show it. Otherwise show a fast progress bar.
+            if lottie_tunnel:
+                st_lottie(lottie_tunnel, height=600, speed=2.0, key="warp_tunnel")
             else:
-                st.write("CONNECTING...") # Fallback
-                
-            # 3. Wait for the user to "fly" through the tunnel
-            time.sleep(1.8)
+                # Fallback: Just a progress bar if internet is slow
+                st.progress(100)
+            
+            # 3. Wait for the user to "fly" through the tunnel (1.5 seconds)
+            time.sleep(1.5)
             
         # 4. Switch to Main App
         st.session_state['app_mode'] = 'main'
