@@ -12,7 +12,8 @@ st.set_page_config(page_title="Ethara.AI HRMS", layout="wide")
 # ⚠️ REPLACE WITH YOUR ACTUAL RENDER URL
 API_URL = "https://hrms-lite-ac8r.onrender.com"
 
-# --- SESSION STATE ---
+# --- SESSION STATE & DATA PERSISTENCE ---
+# This ensures we don't lose the "Intro" completion state on simple re-runs
 if 'app_mode' not in st.session_state:
     st.session_state['app_mode'] = 'intro'
 
@@ -28,10 +29,9 @@ def load_lottieurl(url: str):
 
 # Animations
 lottie_city = load_lottieurl("https://lottie.host/8040d77d-741c-4b55-871d-720496839077/1r4i9z6l8o.json")
+lottie_tunnel = load_lottieurl("https://lottie.host/93291887-4340-4c4f-9694-814d95b597c4/1X152e041F.json") 
 lottie_connection = load_lottieurl("https://lottie.host/5b090740-459d-4786-8152-4740e5317768/0j5Q1k2w2N.json")
 lottie_scan = load_lottieurl("https://lottie.host/a80d5885-26bf-466d-974a-1017e80f2d9e/9Z9V3X5s4T.json")
-# Tech Loader
-lottie_loader = load_lottieurl("https://lottie.host/b2b95b8d-2911-4712-ba26-1d11394589d9/5q1q6f1e8K.json") 
 
 # --- CUSTOM CSS ---
 st.markdown("""
@@ -186,35 +186,18 @@ if st.session_state['app_mode'] == 'intro':
             with b2:
                 init_btn = st.button("INITIALIZE SYSTEM", use_container_width=True)
     
-    # --- LOADING BAR ANIMATION ---
+    # --- THE "WARP SPEED" TRANSITION ---
     if init_btn:
         intro_holder.empty()
         
         with st.empty():
-            # Show high-tech loader above bar
-            if lottie_loader:
-                st_lottie(lottie_loader, height=150, key="loader")
-            elif lottie_scan:
-                st_lottie(lottie_scan, height=150, key="loader")
-                
-            # The Loading Bar
-            progress_bar = st.progress(0, text="CONNECTING...")
+            if lottie_tunnel:
+                st_lottie(lottie_tunnel, height=600, speed=2.0, key="warp_tunnel")
+            else:
+                st.progress(100)
             
-            for i in range(100):
-                time.sleep(0.02) # Speed of loading
-                # Update text at specific percentages for effect
-                if i < 40:
-                    txt = "CONNECTING..."
-                elif i < 80:
-                    txt = "VERIFYING CREDENTIALS..."
-                else:
-                    txt = "ACCESS GRANTED..."
-                
-                progress_bar.progress(i + 1, text=txt)
+            time.sleep(1.5)
             
-            time.sleep(0.5) # Short pause at 100%
-            
-        # Switch to Main App
         st.session_state['app_mode'] = 'main'
         st.rerun()
 
@@ -282,7 +265,6 @@ else:
                 e_id = st.text_input("UNIT ID")
                 name = st.text_input("OPERATIVE NAME")
                 email = st.text_input("SECURE COMMS (EMAIL)")
-                # ⚠️ REMOVED "Admin" FROM THE LIST BELOW
                 dept = st.selectbox("ASSIGNMENT", ["Cyber Security", "Infrastructure", "Field Ops", "Intel"])
                 submit = st.form_submit_button("UPLOAD DATA")
                 
@@ -347,8 +329,12 @@ else:
                     sel_name = st.selectbox("SELECT OPERATIVE", list(emp_map.keys()))
                     sel_id = emp_map[sel_name]
                     d = st.date_input("MISSION DATE", date.today())
-                    stat = st.radio("STATUS", ["ACTIVE", "MIA"], horizontal=True)
-                    final_stat = "Present" if stat == "ACTIVE" else "Absent"
+                    
+                    # ⚠️ FIXED: Changed "MIA" to "Inactive"
+                    stat = st.radio("STATUS", ["Active", "Inactive"], horizontal=True)
+                    
+                    # ⚠️ FIXED: Logic to ensure "Inactive" sends "Absent" to backend
+                    final_stat = "Present" if stat == "Active" else "Absent"
                     
                     if st.button("TRANSMIT LOG"):
                         requests.post(f"{API_URL}/attendance/", json={
