@@ -5,3 +5,5 @@ requests
 streamlit
 pandas
 pydantic
+streamlit-lottie
+plotly
