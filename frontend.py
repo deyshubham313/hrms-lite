@@ -282,7 +282,8 @@ else:
                 e_id = st.text_input("UNIT ID")
                 name = st.text_input("OPERATIVE NAME")
                 email = st.text_input("SECURE COMMS (EMAIL)")
-                dept = st.selectbox("ASSIGNMENT", ["Cyber Security", "Infrastructure", "Field Ops", "Intel", "Admin"])
+                # ⚠️ REMOVED "Admin" FROM THE LIST BELOW
+                dept = st.selectbox("ASSIGNMENT", ["Cyber Security", "Infrastructure", "Field Ops", "Intel"])
                 submit = st.form_submit_button("UPLOAD DATA")
                 
                 if submit:
