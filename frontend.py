@@ -4,6 +4,7 @@ import pandas as pd
 import plotly.express as px
 from streamlit_lottie import st_lottie
 from datetime import date, datetime
+import time
 
 # --- CONFIGURATION ---
 st.set_page_config(page_title="Ethara.AI HRMS", layout="wide")
@@ -11,7 +12,7 @@ st.set_page_config(page_title="Ethara.AI HRMS", layout="wide")
 # ⚠️ REPLACE WITH YOUR ACTUAL RENDER URL
 API_URL = "https://hrms-lite-ac8r.onrender.com"
 
-# --- SESSION STATE (For Page Navigation) ---
+# --- SESSION STATE ---
 if 'app_mode' not in st.session_state:
     st.session_state['app_mode'] = 'intro'
 
@@ -164,37 +165,52 @@ st.markdown("""
 
 if st.session_state['app_mode'] == 'intro':
     # --- INTRO LANDING PAGE ---
-    
-    # Empty container to center things vertically if needed
     st.markdown("<br><br>", unsafe_allow_html=True)
     
-    c1, c2, c3 = st.columns([1, 2, 1])
+    # We use a placeholder to swap content for the animation
+    main_holder = st.empty()
     
-    with c2:
-        # Huge Company Logo
-        st.markdown('<div class="intro-title">Ethara.AI</div>', unsafe_allow_html=True)
-        st.markdown('<div class="intro-subtitle">ADVANCED HUMAN SYSTEMS</div>', unsafe_allow_html=True)
-        
-        # City Animation
-        if lottie_city:
-            st_lottie(lottie_city, height=350)
+    with main_holder.container():
+        c1, c2, c3 = st.columns([1, 2, 1])
+        with c2:
+            st.markdown('<div class="intro-title">Ethara.AI</div>', unsafe_allow_html=True)
+            st.markdown('<div class="intro-subtitle">ADVANCED HUMAN SYSTEMS</div>', unsafe_allow_html=True)
             
-        st.markdown("<br>", unsafe_allow_html=True)
+            if lottie_city:
+                st_lottie(lottie_city, height=350, key="intro_city")
+                
+            st.markdown("<br>", unsafe_allow_html=True)
+            
+            b1, b2, b3 = st.columns([1, 2, 1])
+            with b2:
+                init_btn = st.button("INITIALIZE SYSTEM", use_container_width=True)
+    
+    # --- THE "WARP SPEED" TRANSITION ---
+    if init_btn:
+        # 1. Clear the screen
+        main_holder.empty()
         
-        # Centered Start Button
-        # We use columns inside the column to squeeze the button size
-        b1, b2, b3 = st.columns([1, 2, 1])
-        with b2:
-            if st.button("INITIALIZE SYSTEM", use_container_width=True):
-                st.session_state['app_mode'] = 'main'
-                st.rerun()
+        # 2. Show the "Flying through data" animation
+        with st.empty():
+            # We use the connection animation but scaled up and sped up
+            if lottie_connection:
+                st_lottie(lottie_connection, height=600, speed=2.5, key="warp_tunnel")
+            else:
+                st.write("CONNECTING...") # Fallback
+                
+            # 3. Wait for the user to "fly" through the tunnel
+            time.sleep(1.8)
+            
+        # 4. Switch to Main App
+        st.session_state['app_mode'] = 'main'
+        st.rerun()
 
 else:
     # --- MAIN APPLICATION (Sidebar + Pages) ---
     
     with st.sidebar:
         if lottie_city:
-            st_lottie(lottie_city, height=180)
+            st_lottie(lottie_city, height=180, key="sidebar_city")
         
         st.markdown('<div class="company-logo">Ethara.AI</div>', unsafe_allow_html=True)
         st.markdown('<div class="company-sub">HUMAN RESOURCES</div>', unsafe_allow_html=True)
@@ -234,11 +250,11 @@ else:
                     with col2:
                         st.subheader("LIVE FEED")
                         if lottie_connection:
-                            st_lottie(lottie_connection, height=200)
+                            st_lottie(lottie_connection, height=200, key="dash_conn")
                 else:
                     st.info("NO DATA STREAM.")
                     if lottie_scan:
-                        st_lottie(lottie_scan, height=200)
+                        st_lottie(lottie_scan, height=200, key="dash_scan")
         except:
             st.error("SIGNAL LOST. CHECK CONNECTION.")
 
@@ -347,6 +363,6 @@ else:
                             st.info("NO RECORDS FOUND.")
                     else:
                         if lottie_scan:
-                            st_lottie(lottie_scan, height=200)
+                            st_lottie(lottie_scan, height=200, key="log_scan")
         except:
             st.error("DATA LINK SEVERED")
