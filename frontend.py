@@ -6,8 +6,7 @@ from streamlit_lottie import st_lottie
 from datetime import date, datetime
 
 # --- CONFIGURATION ---
-# Removed emoji icon, strict text title
-st.set_page_config(page_title="CityOps HRMS", layout="wide")
+st.set_page_config(page_title="Ethara.AI HRMS", layout="wide")
 
 # ⚠️ REPLACE WITH YOUR ACTUAL RENDER URL
 API_URL = "https://hrms-lite-ac8r.onrender.com"
@@ -22,15 +21,15 @@ def load_lottieurl(url: str):
     except:
         return None
 
-# Animations (Kept these as they are professional graphics, not emojis)
+# Animations
 lottie_city = load_lottieurl("https://lottie.host/8040d77d-741c-4b55-871d-720496839077/1r4i9z6l8o.json")
 lottie_connection = load_lottieurl("https://lottie.host/5b090740-459d-4786-8152-4740e5317768/0j5Q1k2w2N.json")
 lottie_scan = load_lottieurl("https://lottie.host/a80d5885-26bf-466d-974a-1017e80f2d9e/9Z9V3X5s4T.json")
 
-# --- CUSTOM CSS (HUD EDITION) ---
+# --- CUSTOM CSS ---
 st.markdown("""
     <style>
-    /* 1. CUSTOM FUTURISTIC MOUSE CURSOR */
+    /* 1. CUSTOM CURSOR */
     * {
         cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path d="M0,0 L16,0 L32,12 L32,32 L12,32 L0,20 Z" fill="%23222" stroke="%2364FFDA" stroke-width="1"/><circle cx="16" cy="16" r="6" fill="none" stroke="%2364FFDA" stroke-width="2"/></svg>') 0 0, auto !important;
     }
@@ -78,7 +77,7 @@ st.markdown("""
     /* 5. TYPOGRAPHY */
     h1, h2, h3 {
         color: #E6F1FF !important;
-        font-family: 'Courier New', monospace;
+        font-family: 'Verdana', sans-serif; /* Clean font like the logo */
         text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
     }
     p, label, .stMarkdown, .stRadio label {
@@ -114,6 +113,24 @@ st.markdown("""
         background-color: rgba(2, 12, 27, 0.95);
         border-right: 1px solid #233554;
     }
+    
+    /* Logo Styling */
+    .company-logo {
+        font-size: 40px;
+        font-weight: bold;
+        color: white;
+        text-align: center;
+        margin-bottom: 5px;
+        font-family: 'Verdana', sans-serif;
+    }
+    .company-sub {
+        font-size: 12px;
+        color: #64FFDA;
+        text-align: center;
+        letter-spacing: 3px;
+        margin-top: -10px;
+        margin-bottom: 20px;
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -122,8 +139,9 @@ with st.sidebar:
     if lottie_city:
         st_lottie(lottie_city, height=180)
     
-    st.markdown("## CITY OPS")
-    st.markdown("### URBAN COMMAND CENTER")
+    # Custom HTML for Ethara.AI Logo
+    st.markdown('<div class="company-logo">Ethara.AI</div>', unsafe_allow_html=True)
+    st.markdown('<div class="company-sub">HUMAN RESOURCES</div>', unsafe_allow_html=True)
     
     menu = st.radio("SYSTEM NAVIGATION", ["Dashboard", "Personnel", "Activity Logs"])
     st.markdown("---")
@@ -131,8 +149,8 @@ with st.sidebar:
 
 # --- PAGE 1: DASHBOARD ---
 if menu == "Dashboard":
-    st.title("SYSTEM OVERVIEW")
-    st.markdown("REAL-TIME CITY METRICS")
+    st.title("ETHARA SYSTEM OVERVIEW")
+    st.markdown("REAL-TIME METRICS")
     
     try:
         emp_res = requests.get(f"{API_URL}/employees/")
