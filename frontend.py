@@ -11,6 +11,10 @@ st.set_page_config(page_title="Ethara.AI HRMS", layout="wide")
 # ⚠️ REPLACE WITH YOUR ACTUAL RENDER URL
 API_URL = "https://hrms-lite-ac8r.onrender.com"
 
+# --- SESSION STATE (For Page Navigation) ---
+if 'app_mode' not in st.session_state:
+    st.session_state['app_mode'] = 'intro'
+
 # --- ASSETS ---
 def load_lottieurl(url: str):
     try:
@@ -77,7 +81,7 @@ st.markdown("""
     /* 5. TYPOGRAPHY */
     h1, h2, h3 {
         color: #E6F1FF !important;
-        font-family: 'Verdana', sans-serif; /* Clean font like the logo */
+        font-family: 'Verdana', sans-serif;
         text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
     }
     p, label, .stMarkdown, .stRadio label {
@@ -94,10 +98,11 @@ st.markdown("""
         font-weight: 900 !important;
         letter-spacing: 1px;
         box-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
+        transition: all 0.3s ease;
     }
     .stButton>button:hover {
         transform: scale(1.05);
-        box-shadow: 0 0 25px rgba(100, 255, 218, 0.8);
+        box-shadow: 0 0 30px rgba(100, 255, 218, 0.9);
         color: white !important;
     }
     
@@ -131,167 +136,217 @@ st.markdown("""
         margin-top: -10px;
         margin-bottom: 20px;
     }
+    
+    /* INTRO PAGE SPECIFIC */
+    .intro-title {
+        font-size: 80px;
+        font-weight: 900;
+        text-align: center;
+        background: -webkit-linear-gradient(#64FFDA, #2196F3);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-top: 50px;
+        text-shadow: 0 0 30px rgba(100, 255, 218, 0.3);
+    }
+    .intro-subtitle {
+        font-size: 20px;
+        text-align: center;
+        color: #E6F1FF;
+        letter-spacing: 8px;
+        margin-bottom: 30px;
+    }
     </style>
     """, unsafe_allow_html=True)
 
-# --- SIDEBAR ---
-with st.sidebar:
-    if lottie_city:
-        st_lottie(lottie_city, height=180)
-    
-    # Custom HTML for Ethara.AI Logo
-    st.markdown('<div class="company-logo">Ethara.AI</div>', unsafe_allow_html=True)
-    st.markdown('<div class="company-sub">HUMAN RESOURCES</div>', unsafe_allow_html=True)
-    
-    menu = st.radio("SYSTEM NAVIGATION", ["Dashboard", "Personnel", "Activity Logs"])
-    st.markdown("---")
-    st.caption("STATUS: NETWORK SECURE")
+# ==========================================
+# PAGE LOGIC
+# ==========================================
 
-# --- PAGE 1: DASHBOARD ---
-if menu == "Dashboard":
-    st.title("ETHARA SYSTEM OVERVIEW")
-    st.markdown("REAL-TIME METRICS")
+if st.session_state['app_mode'] == 'intro':
+    # --- INTRO LANDING PAGE ---
     
-    try:
-        emp_res = requests.get(f"{API_URL}/employees/")
-        if emp_res.status_code == 200:
-            df = pd.DataFrame(emp_res.json())
-            
-            if not df.empty:
-                c1, c2 = st.columns(2)
-                with c1:
-                    st.metric("ACTIVE UNITS", len(df), "ONLINE")
-                with c2:
-                    top_dept = df['department'].value_counts().idxmax()
-                    st.metric("PRIMARY SECTOR", top_dept)
-                
-                st.markdown("---")
-                col1, col2 = st.columns([2,1])
-                
-                with col1:
-                    st.subheader("SECTOR ALLOCATION")
-                    fig = px.pie(df, names='department', hole=0.7, 
-                                 color_discrete_sequence=["#64FFDA", "#FF6B6B", "#BD34FE", "#2196F3"])
-                    fig.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", font_color="#E6F1FF")
-                    st.plotly_chart(fig, use_container_width=True)
-                
-                with col2:
-                    st.subheader("LIVE FEED")
-                    if lottie_connection:
-                        st_lottie(lottie_connection, height=200)
-            else:
-                st.info("NO DATA STREAM.")
-                if lottie_scan:
-                    st_lottie(lottie_scan, height=200)
-    except:
-        st.error("SIGNAL LOST. CHECK CONNECTION.")
-
-# --- PAGE 2: PERSONNEL ---
-elif menu == "Personnel":
-    st.title("PERSONNEL DATABASE")
+    # Empty container to center things vertically if needed
+    st.markdown("<br><br>", unsafe_allow_html=True)
     
-    c1, c2 = st.columns([1, 2])
-    with c1:
-        st.subheader("ENLIST UNIT")
-        with st.form("add_form"):
-            e_id = st.text_input("UNIT ID")
-            name = st.text_input("OPERATIVE NAME")
-            email = st.text_input("SECURE COMMS (EMAIL)")
-            dept = st.selectbox("ASSIGNMENT", ["Cyber Security", "Infrastructure", "Field Ops", "Intel", "Admin"])
-            submit = st.form_submit_button("UPLOAD DATA")
-            
-            if submit:
-                if e_id and name:
-                    res = requests.post(f"{API_URL}/employees/", json={
-                        "emp_id_str": e_id, "name": name, "email": email, "department": dept
-                    })
-                    if res.status_code == 200:
-                        st.success("UNIT REGISTERED")
-                        st.rerun()
-                    else:
-                        st.error("REGISTRATION ERROR")
-
+    c1, c2, c3 = st.columns([1, 2, 1])
+    
     with c2:
-        st.subheader("UNIT MANIFEST")
-        if st.button("SYNC DATA"): st.rerun()
+        # Huge Company Logo
+        st.markdown('<div class="intro-title">Ethara.AI</div>', unsafe_allow_html=True)
+        st.markdown('<div class="intro-subtitle">ADVANCED HUMAN SYSTEMS</div>', unsafe_allow_html=True)
+        
+        # City Animation
+        if lottie_city:
+            st_lottie(lottie_city, height=350)
+            
+        st.markdown("<br>", unsafe_allow_html=True)
+        
+        # Centered Start Button
+        # We use columns inside the column to squeeze the button size
+        b1, b2, b3 = st.columns([1, 2, 1])
+        with b2:
+            if st.button("INITIALIZE SYSTEM", use_container_width=True):
+                st.session_state['app_mode'] = 'main'
+                st.rerun()
+
+else:
+    # --- MAIN APPLICATION (Sidebar + Pages) ---
+    
+    with st.sidebar:
+        if lottie_city:
+            st_lottie(lottie_city, height=180)
+        
+        st.markdown('<div class="company-logo">Ethara.AI</div>', unsafe_allow_html=True)
+        st.markdown('<div class="company-sub">HUMAN RESOURCES</div>', unsafe_allow_html=True)
+        
+        menu = st.radio("SYSTEM NAVIGATION", ["Dashboard", "Personnel", "Activity Logs"])
+        st.markdown("---")
+        st.caption("STATUS: NETWORK SECURE")
+
+    # --- PAGE 1: DASHBOARD ---
+    if menu == "Dashboard":
+        st.title("ETHARA SYSTEM OVERVIEW")
+        st.markdown("REAL-TIME METRICS")
+        
+        try:
+            emp_res = requests.get(f"{API_URL}/employees/")
+            if emp_res.status_code == 200:
+                df = pd.DataFrame(emp_res.json())
+                
+                if not df.empty:
+                    c1, c2 = st.columns(2)
+                    with c1:
+                        st.metric("ACTIVE UNITS", len(df), "ONLINE")
+                    with c2:
+                        top_dept = df['department'].value_counts().idxmax()
+                        st.metric("PRIMARY SECTOR", top_dept)
+                    
+                    st.markdown("---")
+                    col1, col2 = st.columns([2,1])
+                    
+                    with col1:
+                        st.subheader("SECTOR ALLOCATION")
+                        fig = px.pie(df, names='department', hole=0.7, 
+                                     color_discrete_sequence=["#64FFDA", "#FF6B6B", "#BD34FE", "#2196F3"])
+                        fig.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", font_color="#E6F1FF")
+                        st.plotly_chart(fig, use_container_width=True)
+                    
+                    with col2:
+                        st.subheader("LIVE FEED")
+                        if lottie_connection:
+                            st_lottie(lottie_connection, height=200)
+                else:
+                    st.info("NO DATA STREAM.")
+                    if lottie_scan:
+                        st_lottie(lottie_scan, height=200)
+        except:
+            st.error("SIGNAL LOST. CHECK CONNECTION.")
+
+    # --- PAGE 2: PERSONNEL ---
+    elif menu == "Personnel":
+        st.title("PERSONNEL DATABASE")
+        
+        c1, c2 = st.columns([1, 2])
+        with c1:
+            st.subheader("ENLIST UNIT")
+            with st.form("add_form"):
+                e_id = st.text_input("UNIT ID")
+                name = st.text_input("OPERATIVE NAME")
+                email = st.text_input("SECURE COMMS (EMAIL)")
+                dept = st.selectbox("ASSIGNMENT", ["Cyber Security", "Infrastructure", "Field Ops", "Intel", "Admin"])
+                submit = st.form_submit_button("UPLOAD DATA")
+                
+                if submit:
+                    if e_id and name:
+                        res = requests.post(f"{API_URL}/employees/", json={
+                            "emp_id_str": e_id, "name": name, "email": email, "department": dept
+                        })
+                        if res.status_code == 200:
+                            st.success("UNIT REGISTERED")
+                            st.rerun()
+                        else:
+                            st.error("REGISTRATION ERROR")
+
+        with c2:
+            st.subheader("UNIT MANIFEST")
+            if st.button("SYNC DATA"): st.rerun()
+            
+            try:
+                res = requests.get(f"{API_URL}/employees/")
+                if res.status_code == 200:
+                    data = res.json()
+                    if data:
+                        df = pd.DataFrame(data)
+                        attendance_counts = []
+                        for eid in df['emp_id_str']:
+                            try:
+                                att_res = requests.get(f"{API_URL}/attendance/{eid}")
+                                if att_res.status_code == 200:
+                                    att_data = att_res.json()
+                                    present_count = sum(1 for x in att_data if x['status'] == 'Present')
+                                    attendance_counts.append(present_count)
+                                else:
+                                    attendance_counts.append(0)
+                            except:
+                                attendance_counts.append(0)
+                        df['MISSIONS COMPLETE'] = attendance_counts
+
+                        st.dataframe(df[["emp_id_str", "name", "department", "MISSIONS COMPLETE"]], use_container_width=True, hide_index=True)
+                        
+                        with st.expander("DISAVOW UNIT"):
+                            del_id = st.selectbox("SELECT UNIT ID", df['emp_id_str'])
+                            if st.button("CONFIRM TERMINATION"):
+                                requests.delete(f"{API_URL}/employees/{del_id}")
+                                st.rerun()
+            except:
+                st.warning("DATABASE ENCRYPTED")
+
+    # --- PAGE 3: LOGS ---
+    elif menu == "Activity Logs":
+        st.title("ACTIVITY LOGS")
         
         try:
             res = requests.get(f"{API_URL}/employees/")
-            if res.status_code == 200:
-                data = res.json()
-                if data:
-                    df = pd.DataFrame(data)
-                    # BONUS: Total Present Calc
-                    attendance_counts = []
-                    for eid in df['emp_id_str']:
-                        try:
-                            att_res = requests.get(f"{API_URL}/attendance/{eid}")
-                            if att_res.status_code == 200:
-                                att_data = att_res.json()
-                                present_count = sum(1 for x in att_data if x['status'] == 'Present')
-                                attendance_counts.append(present_count)
-                            else:
-                                attendance_counts.append(0)
-                        except:
-                            attendance_counts.append(0)
-                    df['MISSIONS COMPLETE'] = attendance_counts
-
-                    st.dataframe(df[["emp_id_str", "name", "department", "MISSIONS COMPLETE"]], use_container_width=True, hide_index=True)
-                    
-                    with st.expander("DISAVOW UNIT"):
-                        del_id = st.selectbox("SELECT UNIT ID", df['emp_id_str'])
-                        if st.button("CONFIRM TERMINATION"):
-                            requests.delete(f"{API_URL}/employees/{del_id}")
-                            st.rerun()
-        except:
-            st.warning("DATABASE ENCRYPTED")
-
-# --- PAGE 3: LOGS ---
-elif menu == "Activity Logs":
-    st.title("ACTIVITY LOGS")
-    
-    try:
-        res = requests.get(f"{API_URL}/employees/")
-        if res.status_code == 200 and res.json():
-            emps = res.json()
-            emp_map = {e['name']: e['emp_id_str'] for e in emps}
-            
-            col1, col2 = st.columns([1,2])
-            with col1:
-                st.subheader("UPDATE STATUS")
-                sel_name = st.selectbox("SELECT OPERATIVE", list(emp_map.keys()))
-                sel_id = emp_map[sel_name]
-                d = st.date_input("MISSION DATE", date.today())
-                stat = st.radio("STATUS", ["ACTIVE", "MIA"], horizontal=True)
-                final_stat = "Present" if stat == "ACTIVE" else "Absent"
+            if res.status_code == 200 and res.json():
+                emps = res.json()
+                emp_map = {e['name']: e['emp_id_str'] for e in emps}
                 
-                if st.button("TRANSMIT LOG"):
-                    requests.post(f"{API_URL}/attendance/", json={
-                        "emp_id_str": sel_id, "date": str(d), "status": final_stat
-                    })
-                    st.success("LOG SECURED")
-
-            with col2:
-                st.subheader("MISSION HISTORY")
-                use_filter = st.checkbox("Apply Time Filter")
-                hist = requests.get(f"{API_URL}/attendance/{sel_id}")
-                if hist.status_code == 200 and hist.json():
-                    df_h = pd.DataFrame(hist.json())
-                    if use_filter:
-                        start_d = st.date_input("Start Date", date.today())
-                        df_h['date'] = pd.to_datetime(df_h['date']).dt.date
-                        df_h = df_h[df_h['date'] >= start_d]
+                col1, col2 = st.columns([1,2])
+                with col1:
+                    st.subheader("UPDATE STATUS")
+                    sel_name = st.selectbox("SELECT OPERATIVE", list(emp_map.keys()))
+                    sel_id = emp_map[sel_name]
+                    d = st.date_input("MISSION DATE", date.today())
+                    stat = st.radio("STATUS", ["ACTIVE", "MIA"], horizontal=True)
+                    final_stat = "Present" if stat == "ACTIVE" else "Absent"
                     
-                    if not df_h.empty:
-                        colors = {"Present": "#64FFDA", "Absent": "#FF6B6B"}
-                        fig = px.bar(df_h, x='date', y='status', color='status', 
-                                     color_discrete_map=colors, title="OPERATIONAL UPTIME")
-                        fig.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", font_color="#E6F1FF")
-                        st.plotly_chart(fig, use_container_width=True)
+                    if st.button("TRANSMIT LOG"):
+                        requests.post(f"{API_URL}/attendance/", json={
+                            "emp_id_str": sel_id, "date": str(d), "status": final_stat
+                        })
+                        st.success("LOG SECURED")
+
+                with col2:
+                    st.subheader("MISSION HISTORY")
+                    use_filter = st.checkbox("Apply Time Filter")
+                    hist = requests.get(f"{API_URL}/attendance/{sel_id}")
+                    if hist.status_code == 200 and hist.json():
+                        df_h = pd.DataFrame(hist.json())
+                        if use_filter:
+                            start_d = st.date_input("Start Date", date.today())
+                            df_h['date'] = pd.to_datetime(df_h['date']).dt.date
+                            df_h = df_h[df_h['date'] >= start_d]
+                        
+                        if not df_h.empty:
+                            colors = {"Present": "#64FFDA", "Absent": "#FF6B6B"}
+                            fig = px.bar(df_h, x='date', y='status', color='status', 
+                                         color_discrete_map=colors, title="OPERATIONAL UPTIME")
+                            fig.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", font_color="#E6F1FF")
+                            st.plotly_chart(fig, use_container_width=True)
+                        else:
+                            st.info("NO RECORDS FOUND.")
                     else:
-                        st.info("NO RECORDS FOUND.")
-                else:
-                    if lottie_scan:
-                        st_lottie(lottie_scan, height=200)
-    except:
-        st.error("DATA LINK SEVERED")
+                        if lottie_scan:
+                            st_lottie(lottie_scan, height=200)
+        except:
+            st.error("DATA LINK SEVERED")
