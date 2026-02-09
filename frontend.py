@@ -6,7 +6,8 @@ from streamlit_lottie import st_lottie
 from datetime import date, datetime
 
 # --- CONFIGURATION ---
-st.set_page_config(page_title="CityOps HRMS", page_icon="🌃", layout="wide")
+# Removed emoji icon, strict text title
+st.set_page_config(page_title="CityOps HRMS", layout="wide")
 
 # ⚠️ REPLACE WITH YOUR ACTUAL RENDER URL
 API_URL = "https://hrms-lite-ac8r.onrender.com"
@@ -21,12 +22,12 @@ def load_lottieurl(url: str):
     except:
         return None
 
-# Animations
+# Animations (Kept these as they are professional graphics, not emojis)
 lottie_city = load_lottieurl("https://lottie.host/8040d77d-741c-4b55-871d-720496839077/1r4i9z6l8o.json")
 lottie_connection = load_lottieurl("https://lottie.host/5b090740-459d-4786-8152-4740e5317768/0j5Q1k2w2N.json")
 lottie_scan = load_lottieurl("https://lottie.host/a80d5885-26bf-466d-974a-1017e80f2d9e/9Z9V3X5s4T.json")
 
-# --- CUSTOM CSS (HUD EDITION WITH CYBER BUTTONS) ---
+# --- CUSTOM CSS (HUD EDITION) ---
 st.markdown("""
     <style>
     /* 1. CUSTOM FUTURISTIC MOUSE CURSOR */
@@ -85,11 +86,10 @@ st.markdown("""
         font-family: 'Verdana', sans-serif;
     }
     
-    /* 6. NEON CYBER BUTTONS (UPDATED FOR VISIBILITY) */
+    /* 6. NEON CYBER BUTTONS */
     .stButton>button {
-        /* Changed to bright cyan/blue gradient for high visibility */
         background: linear-gradient(45deg, #64FFDA, #2196F3) !important;
-        color: #0a192f !important; /* Dark text contrasts better on bright button */
+        color: #0a192f !important;
         border: none !important;
         clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
         font-weight: 900 !important;
@@ -122,16 +122,16 @@ with st.sidebar:
     if lottie_city:
         st_lottie(lottie_city, height=180)
     
-    st.markdown("## 🏙️ CITY OPS")
+    st.markdown("## CITY OPS")
     st.markdown("### URBAN COMMAND CENTER")
     
     menu = st.radio("SYSTEM NAVIGATION", ["Dashboard", "Personnel", "Activity Logs"])
     st.markdown("---")
-    st.caption("STATUS: 🟢 NETWORK SECURE")
+    st.caption("STATUS: NETWORK SECURE")
 
 # --- PAGE 1: DASHBOARD ---
 if menu == "Dashboard":
-    st.title("📡 SYSTEM OVERVIEW")
+    st.title("SYSTEM OVERVIEW")
     st.markdown("REAL-TIME CITY METRICS")
     
     try:
@@ -166,11 +166,10 @@ if menu == "Dashboard":
                 if lottie_scan:
                     st_lottie(lottie_scan, height=200)
     except:
-        st.error("❌ SIGNAL LOST. CHECK CONNECTION.")
+        st.error("SIGNAL LOST. CHECK CONNECTION.")
 
 # --- PAGE 2: PERSONNEL ---
 elif menu == "Personnel":
-    # REMOVED THE DETECTIVE ICON HERE
     st.title("PERSONNEL DATABASE")
     
     c1, c2 = st.columns([1, 2])
@@ -196,8 +195,7 @@ elif menu == "Personnel":
 
     with c2:
         st.subheader("UNIT MANIFEST")
-        # THIS BUTTON WILL NOW BE BRIGHT CYAN AND VISIBLE
-        if st.button("🔄 SYNC DATA"): st.rerun()
+        if st.button("SYNC DATA"): st.rerun()
         
         try:
             res = requests.get(f"{API_URL}/employees/")
@@ -222,7 +220,7 @@ elif menu == "Personnel":
 
                     st.dataframe(df[["emp_id_str", "name", "department", "MISSIONS COMPLETE"]], use_container_width=True, hide_index=True)
                     
-                    with st.expander("⚠️ DISAVOW UNIT"):
+                    with st.expander("DISAVOW UNIT"):
                         del_id = st.selectbox("SELECT UNIT ID", df['emp_id_str'])
                         if st.button("CONFIRM TERMINATION"):
                             requests.delete(f"{API_URL}/employees/{del_id}")
@@ -232,7 +230,7 @@ elif menu == "Personnel":
 
 # --- PAGE 3: LOGS ---
 elif menu == "Activity Logs":
-    st.title("🛰️ ACTIVITY LOGS")
+    st.title("ACTIVITY LOGS")
     
     try:
         res = requests.get(f"{API_URL}/employees/")
